@@ -23,6 +23,7 @@ import com.edu.pet.entity.Food;
 import com.edu.pet.entity.Ornament;
 import com.edu.pet.entity.Pet;
 import com.edu.pet.entity.User;
+import com.edu.pet.util.MD5Util;
 
 @Controller
 @RequestMapping
@@ -64,7 +65,7 @@ public class IndexController {
 		String role = request.getParameter("role");
 		//用户
 		if ("0".equals(role)) {
-			User user = this.userDao.selectByUsernameAndPwd(username, password);
+			User user = this.userDao.selectByUsernameAndPwd(username, MD5Util.encryption(password));
 			model.addAttribute("msg", "信息有误，请重新登录");
 			List<Pet> pets = this.petDao.getAllEntry();
 			model.addAttribute("pets", pets);
@@ -77,7 +78,7 @@ public class IndexController {
 			model.addAttribute("user", user);
 		}
 		if ("1".equals(role)) {
-			Admin admin = this.adminDao.selectByUsernameAndPwd(username, password);
+			Admin admin = this.adminDao.selectByUsernameAndPwd(username, MD5Util.encryption(password));
 			if (admin == null) {
 				List<Pet> pets = this.petDao.getAllEntry();
 				model.addAttribute("pets", pets);
@@ -120,6 +121,7 @@ public class IndexController {
 	@RequestMapping(value="/reg", method=RequestMethod.POST)
 	public String doReg(User user) {
 		user.setRegTime(new Date());
+		user.setPassword(MD5Util.encryption(user.getPassword()));
 		this.userDao.saveEntry(user);
 		User u = this.userDao.selectByUsernameAndPwd(user.getUsername(), user.getPassword());
 		Cart cart = new Cart();

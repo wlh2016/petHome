@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.edu.pet.dao.UserDao;
 import com.edu.pet.entity.User;
+import com.edu.pet.util.MD5Util;
 
 @Controller
 @RequestMapping("user")
@@ -77,6 +78,7 @@ public class UserController {
 	public String reviseSelfInfo(User user, HttpSession session) {
 		User loginUser = (User)session.getAttribute("loginUser");
 		user.setRegTime(loginUser.getRegTime());
+		user.setPassword(MD5Util.encryption(user.getPassword()));
 		this.userDao.updateEntry(user);
 		session.setAttribute("loginUser", user);
 		return "redirect:/user/userInfo";

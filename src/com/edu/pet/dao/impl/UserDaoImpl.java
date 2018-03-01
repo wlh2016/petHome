@@ -3,7 +3,6 @@ package com.edu.pet.dao.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.edu.pet.dao.UserDao;
 import com.edu.pet.entity.User;
